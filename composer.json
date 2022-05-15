@@ -16,6 +16,14 @@
     "require-dev": {
         "vimeo/psalm": "4.20.0"
     },
-    "autoload": {},
-    "autoload-dev": {}
+    "autoload": {
+        "psr-4": {
+            "parroty-exp\\php-sample\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\parroty-exp\\php-sample\\": "tests/"
+        }
+    }
 }
