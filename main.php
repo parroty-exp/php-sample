@@ -1,5 +1,5 @@
 <?php
-    GLOBAL $global;
+    // GLOBAL $global;
     class Site {
         public static function main() {
             for ($x = 0; $x <= 10; $x++) {
