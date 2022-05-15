@@ -1,0 +1,61 @@
+name: Psalm Static analysis
+
+on: [push, pull_request]
+
+jobs:
+  psalm:
+    name: Psalm
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.1
+          coverage: none
+      - name: Psalm
+        uses: docker://vimeo/psalm-github-actions
+        with:
+          security_analysis: true
+          composer_ignore_platform_reqs: false
+          report_file: results.sarif
+      - name: Upload Security Analysis results to GitHub
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: results.sarif
+  php-cs-fixer:
+    name: PHP-CS-Fixer
+    runs-on: Ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.1
+          coverage: none
+      - name: PHP-CS-Fixer
+        uses: docker://oskarstark/php-cs-fixer-ga:3.7.0
+        with:
+          args: --dry-run --diff
+  phpstan:
+    name: PHPStan
+    runs-on: Ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.1
+          coverage: none
+      - name: PHPStan
+        uses: docker://oskarstark/phpstan-ga:1.4.6
+        with:
+          entrypoint: /composer/vendor/bin/phpstan
+          args: analyze --no-progress
